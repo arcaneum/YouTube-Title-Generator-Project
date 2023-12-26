@@ -5,13 +5,11 @@ import openai
 from dotenv import load_dotenv
 import os
 
-# Load the .env file
-load_dotenv()
+# Access the API key from Streamlit Cloud Secrets
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 
-# Set the OpenAI API key using the OpenAI client
-from openai import OpenAI
-openai_api_key = os.getenv("OPENAI_API_KEY")
-open_ai_client = OpenAI(api_key=openai_api_key)
+# Set the API key for OpenAI
+openai.api_key = openai_api_key
 
 # Assuming the patch function is defined in the instructor module
 import instructor
