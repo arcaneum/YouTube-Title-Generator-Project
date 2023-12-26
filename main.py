@@ -28,7 +28,10 @@ def structured_generator(openai_model, prompt, custom_model):
     )
 
     # Parse the response to get the titles
-    return custom_model(titles=response.choices[0].message['content'].strip().split('\n'))
+    # You may need to adjust this line based on the actual structure of the response
+    titles_content = response.choices[0].message.content if response.choices else ""
+    
+    return custom_model(titles=titles_content.strip().split('\n'))
 
 # Streamlit UI layout starts here
 st.title("YouTube Title Generator")
