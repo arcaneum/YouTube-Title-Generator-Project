@@ -22,7 +22,7 @@ def structured_generator(openai_model, prompt, custom_model):
     ]
 
     # Make the API call to OpenAI using the chat completion endpoint
-    response = client.ChatCompletion.create(
+    response = client.chat.completions.create(
         model=openai_model, 
         messages=messages
     )
