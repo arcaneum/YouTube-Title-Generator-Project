@@ -1,32 +1,32 @@
+# Import necessary libraries
 import streamlit as st
 from pydantic import BaseModel
 from typing import List
 import openai
 
 # Access the API key from Streamlit Cloud Secrets
-openai_api_key = st.secrets['openai']["OPENAI_API_KEY"]
+# This line retrieves the OpenAI API key stored in the Streamlit Cloud Secrets.
+# It's essential for the app to authenticate with the OpenAI API.
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 
 # Set the API key for OpenAI
+# This sets the retrieved API key for use in all OpenAI API calls within the app.
 openai.api_key = openai_api_key
-
-# Assuming the patch function is defined in the instructor module
-import instructor
-instructor.patch(open_ai_client)
 
 # Pydantic model for structured data validation
 class Titles(BaseModel):
     titles: List[str]
 
-# Function to generate YouTube titles using structured_generator
+# Function to generate YouTube titles using OpenAI
 def structured_generator(openai_model, prompt, custom_model):
-    result: custom_model = open_ai_client.chat.completions.create(
+    response = openai.Completion.create(
         model=openai_model, 
-        response_model=custom_model,
-        messages=[{"role": "user", "content": f"{prompt}, output must be in json"}]
+        prompt=prompt,
+        max_tokens=100
     )
-    return result
+    return custom_model(titles=response.choices[0].text.strip().split('\n'))
 
-# Streamlit app layout
+# Streamlit UI layout starts here
 st.title("YouTube Title Generator")
 
 # Input field for topic
@@ -36,11 +36,9 @@ topic = st.text_input("Enter Topic")
 if st.button("Generate Titles"):
     if topic:
         try:
-            # Call function to generate titles
             prompt = f"Generate 5 creative YouTube title ideas for the topic: '{topic}'"
             openai_model = "gpt-3.5-turbo"
             result = structured_generator(openai_model, prompt, Titles)
-            # Displaying titles
             if result.titles:
                 for title in result.titles:
                     st.write(title)
