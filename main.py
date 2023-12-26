@@ -2,13 +2,13 @@
 import streamlit as st
 from pydantic import BaseModel
 from typing import List
-import openai
+from openai import OpenAI
 # import os
 
 # Access the API key from Streamlit Cloud Secrets
 # This line retrieves the OpenAI API key stored in the Streamlit Cloud Secrets.
 # It's essential for the app to authenticate with the OpenAI API.
-openai_api_key = st.secrets["openai"]["OPENAI_API_KEY"]
+OpenAI.api_key = st.secrets["openai"]["OPENAI_API_KEY"]
 # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
 # Set the API key for OpenAI
