@@ -7,7 +7,8 @@ import openai
 # Access the API key from Streamlit Cloud Secrets
 # This line retrieves the OpenAI API key stored in the Streamlit Cloud Secrets.
 # It's essential for the app to authenticate with the OpenAI API.
-openai_api_key = st.secrets['openai']["OPENAI_API_KEY"]
+#openai_api_key = st.secrets['openai']["OPENAI_API_KEY"]
+os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
 # Set the API key for OpenAI
 # This sets the retrieved API key for use in all OpenAI API calls within the app.
@@ -19,7 +20,7 @@ class Titles(BaseModel):
 
 # Function to generate YouTube titles using OpenAI
 def structured_generator(openai_model, prompt, custom_model):
-    response = openai.Completion.create(
+    response = openai.ChatCompletion.create(
         model=openai_model, 
         prompt=prompt,
         max_tokens=100
