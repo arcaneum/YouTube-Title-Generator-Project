@@ -2,7 +2,7 @@
 import streamlit as st
 from pydantic import BaseModel
 from typing import List
-from openai import OpenAI
+import openai
 # import os
 
 # Access the API key from Streamlit Cloud Secrets
