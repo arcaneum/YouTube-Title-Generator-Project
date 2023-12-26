@@ -2,7 +2,9 @@
 import streamlit as st
 from pydantic import BaseModel
 from typing import List
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key=OpenAI_api_key)
 # import os
 
 # Access the API key from Streamlit Cloud Secrets
@@ -13,7 +15,6 @@ OpenAI_api_key = st.secrets["openai"]["OPENAI_API_KEY"]
 
 # Set the API key for OpenAI
 # This sets the retrieved API key for use in all OpenAI API calls within the app.
-openai.api_key = OpenAI_api_key
 
 # Pydantic model for structured data validation
 class Titles(BaseModel):
@@ -21,11 +22,9 @@ class Titles(BaseModel):
 
 # Function to generate YouTube titles using OpenAI
 def structured_generator(openai_model, prompt, custom_model):
-    response = openai.ChatCompletion.create(
-        model=openai_model, 
-        prompt=prompt,
-        max_tokens=100
-    )
+    response = client.chat.completions.create(model=openai_model, 
+    prompt=prompt,
+    max_tokens=100)
     return custom_model(titles=response.choices[0].text.strip().split('\n'))
 
 # Streamlit UI layout starts here
