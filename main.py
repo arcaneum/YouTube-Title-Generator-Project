@@ -6,14 +6,10 @@ from openai import OpenAI
 # import os
 
 # Access the API key from Streamlit Cloud Secrets
-# This line retrieves the OpenAI API key stored in the Streamlit Cloud Secrets.
-# It's essential for the app to authenticate with the OpenAI API.
 OpenAI_api_key = st.secrets["openai"]["OPENAI_API_KEY"]
-# os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
-client = OpenAI(api_key=OpenAI_api_key)
-# Set the API key for OpenAI
-# This sets the retrieved API key for use in all OpenAI API calls within the app.
+# Create an OpenAI client with the retrieved API key
+client = openai.OpenAI(api_key=OpenAI_api_key)
 
 # Pydantic model for structured data validation
 class Titles(BaseModel):
@@ -21,10 +17,21 @@ class Titles(BaseModel):
 
 # Function to generate YouTube titles using OpenAI
 def structured_generator(openai_model, prompt, custom_model):
-    response = client.chat.completions.create(model=openai_model, 
-    prompt=prompt,
-    max_tokens=100)
-    return custom_model(titles=response.choices[0].text.strip().split('\n'))
+    # Prepare the conversation messages
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": prompt}
+    ]
+
+    # Make the API call to OpenAI using the chat completion endpoint
+    response = client.ChatCompletion.create(
+        model=openai_model, 
+        messages=messages
+    )
+
+    # Parse the response to get the titles
+    # Ensure this parsing aligns with the format of the response
+    return custom_model(titles=response.choices[0].message['content'].strip().split('\n'))
 
 # Streamlit UI layout starts here
 st.title("YouTube Title Generator")
@@ -36,15 +43,22 @@ topic = st.text_input("Enter Topic")
 if st.button("Generate Titles"):
     if topic:
         try:
+            # Formulating the prompt for the OpenAI model
             prompt = f"Generate 5 creative YouTube title ideas for the topic: '{topic}'"
             openai_model = "gpt-3.5-turbo"
+            
+            # Call the function to generate titles
             result = structured_generator(openai_model, prompt, Titles)
+            
+            # Display the generated titles
             if result.titles:
                 for title in result.titles:
                     st.write(title)
             else:
                 st.error("No titles were generated. Try a different topic.")
         except Exception as e:
+            # Handle and display any errors that occur
             st.error(f"Error in generating titles: {e}")
     else:
+        # Prompt the user to enter a topic if none was entered
         st.error("Please enter a topic.")
