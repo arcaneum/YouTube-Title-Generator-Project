@@ -4,7 +4,7 @@ from typing import List
 import openai
 
 # Access the API key from Streamlit Cloud Secrets
-openai_api_key = st.secrets["OPENAI_API_KEY"]
+openai_api_key = st.secrets['openai']["OPENAI_API_KEY"]
 
 # Set the API key for OpenAI
 openai.api_key = openai_api_key
