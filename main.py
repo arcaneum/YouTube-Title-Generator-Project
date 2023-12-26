@@ -1,15 +1,13 @@
-# Import necessary libraries
 import streamlit as st
 from pydantic import BaseModel
 from typing import List
-from openai import OpenAI
-# import os
+from openai import OpenAI  # Corrected import statement as per the latest OpenAI SDK
 
 # Access the API key from Streamlit Cloud Secrets
 OpenAI_api_key = st.secrets["openai"]["OPENAI_API_KEY"]
 
 # Create an OpenAI client with the retrieved API key
-client = openai.OpenAI(api_key=OpenAI_api_key)
+client = OpenAI(api_key=OpenAI_api_key)
 
 # Pydantic model for structured data validation
 class Titles(BaseModel):
@@ -30,7 +28,6 @@ def structured_generator(openai_model, prompt, custom_model):
     )
 
     # Parse the response to get the titles
-    # Ensure this parsing aligns with the format of the response
     return custom_model(titles=response.choices[0].message['content'].strip().split('\n'))
 
 # Streamlit UI layout starts here
@@ -43,22 +40,15 @@ topic = st.text_input("Enter Topic")
 if st.button("Generate Titles"):
     if topic:
         try:
-            # Formulating the prompt for the OpenAI model
             prompt = f"Generate 5 creative YouTube title ideas for the topic: '{topic}'"
             openai_model = "gpt-3.5-turbo"
-            
-            # Call the function to generate titles
             result = structured_generator(openai_model, prompt, Titles)
-            
-            # Display the generated titles
             if result.titles:
                 for title in result.titles:
                     st.write(title)
             else:
                 st.error("No titles were generated. Try a different topic.")
         except Exception as e:
-            # Handle and display any errors that occur
             st.error(f"Error in generating titles: {e}")
     else:
-        # Prompt the user to enter a topic if none was entered
         st.error("Please enter a topic.")
