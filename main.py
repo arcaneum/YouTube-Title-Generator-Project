@@ -13,7 +13,7 @@ OpenAI_api_key = st.secrets["openai"]["OPENAI_API_KEY"]
 
 # Set the API key for OpenAI
 # This sets the retrieved API key for use in all OpenAI API calls within the app.
-OpenAI_api_key = openai_api_key
+openai.api_key = OpenAI_api_key
 
 # Pydantic model for structured data validation
 class Titles(BaseModel):
