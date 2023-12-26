@@ -3,6 +3,7 @@ import streamlit as st
 from pydantic import BaseModel
 from typing import List
 import openai
+import os
 
 # Access the API key from Streamlit Cloud Secrets
 # This line retrieves the OpenAI API key stored in the Streamlit Cloud Secrets.
