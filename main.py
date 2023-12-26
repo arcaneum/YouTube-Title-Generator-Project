@@ -2,8 +2,6 @@ import streamlit as st
 from pydantic import BaseModel
 from typing import List
 import openai
-from dotenv import load_dotenv
-import os
 
 # Access the API key from Streamlit Cloud Secrets
 openai_api_key = st.secrets["OPENAI_API_KEY"]
