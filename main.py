@@ -7,7 +7,7 @@ import openai
 # Access the API key from Streamlit Cloud Secrets
 # This line retrieves the OpenAI API key stored in the Streamlit Cloud Secrets.
 # It's essential for the app to authenticate with the OpenAI API.
-openai_api_key = st.secrets[openai]["OPENAI_API_KEY"]
+openai_api_key = st.secrets['openai']["OPENAI_API_KEY"]
 
 # Set the API key for OpenAI
 # This sets the retrieved API key for use in all OpenAI API calls within the app.
